@@ -7,8 +7,7 @@ import logging
 import hashlib
 import requests
 import urllib.parse
-from push import push
-from config import data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter
+from config import data, headers, cookies, READ_NUM, book, chapter
 
 # 配置日志格式
 logger = logging.getLogger(__name__)
@@ -64,7 +63,6 @@ def refresh_cookie():
     else:
         ERROR_CODE = "❌ 无法获取新密钥或者WXREAD_CURL_BASH配置有误，终止运行。"
         logging.error(ERROR_CODE)
-        push(ERROR_CODE, PUSH_METHOD)
         raise Exception(ERROR_CODE)
 
 refresh_cookie()
@@ -104,7 +102,3 @@ while index <= READ_NUM:
         refresh_cookie()
 
 logging.info("🎉 阅读脚本已完成！")
-
-if PUSH_METHOD not in (None, ''):
-    logging.info("⏱️ 开始推送...")
-    push(f"🎉 微信读书自动阅读完成！\n⏱️ 阅读时长：{(index - 1) * 0.5}分钟。", PUSH_METHOD)
